@@ -109,9 +109,34 @@ document.getElementById("clear").addEventListener("click",()=>{
     display.value='0';
 })
 
-document.getElementById("equals").addEventListener("click",()=>{
-    display.value = eval(display.value)
-})
+document.getElementById("equals").addEventListener("click", () => {
+    let expression = display.value;
+    console.log(expression)
+    // Check if the expression contains the pattern *-+
+    if (expression.match(/\d(\+)+\d/g)) {
+        // Replace all occurrences of *- with +
+        expression = expression.replace(/(\+)+/g, "+");
+    }
+
+    if (expression.match(/\d\*\-\+\d/g)) {
+        // Replace all occurrences of *- with +
+        expression = expression.replace(/\*\-\+/g, "+");
+    }
+
+    // Evaluate the expression
+    let result;
+    try {
+        result = eval(expression);
+    } catch (error) {
+        // Handle any errors that might occur during evaluation
+        console.error("Error evaluating expression:", error);
+        result = "Error";
+    }
+
+    // Update the display with the result
+    display.value = result;
+});
+
 document.getElementById("decimal").addEventListener("click", (e) => {
     let lastNumber = getLastNumber(display.value); // Get the last number entered
     if (!lastNumber.includes('.')) { // Check if the last number does not contain a decimal point
@@ -124,3 +149,6 @@ function getLastNumber(value) {
     const numbers = value.split(/[+\-*\/]/); // Split the value by operators
     return numbers[numbers.length - 1]; // Return the last number in the array
 }
+
+
+
